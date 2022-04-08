@@ -7,6 +7,7 @@ class HeartRateCollection(object):
     def __init__(self, subject_id, data):
         self.subject_id = subject_id
         self.data = data
+        print("data", data)
         self.timestamps = data[:, 0]
         self.values = data[:, 1:]
 

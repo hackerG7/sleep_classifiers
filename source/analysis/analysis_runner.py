@@ -46,18 +46,25 @@ def figures_leave_one_out_three_class_performance():
 def figure_leave_one_out_roc_and_pr():
     classifiers = utils.get_classifiers()
     feature_sets = utils.get_base_feature_sets()
+    print("feature_sets: ",feature_sets)
+
 
     for attributed_classifier in classifiers:
+        if attributed_classifier.name == "Random Forest":
+            classifier_summary = SleepWakeClassifierSummaryBuilder.build_leave_one_out(attributed_classifier, feature_sets)
+            
+            #joblib.dump(classifier_summary.attributed_classifier, 'logistic regression.pkl', compress=9)
+        else:
+            continue
         if Constants.VERBOSE:
             print('Running ' + attributed_classifier.name + '...')
-        classifier_summary = SleepWakeClassifierSummaryBuilder.build_leave_one_out(attributed_classifier, feature_sets)
+        
+        #CurvePlotBuilder.make_roc_sw(classifier_summary)
+        #CurvePlotBuilder.make_pr_sw(classifier_summary)
+        #TableBuilder.print_table_sw(classifier_summary)
 
-        CurvePlotBuilder.make_roc_sw(classifier_summary)
-        CurvePlotBuilder.make_pr_sw(classifier_summary)
-        TableBuilder.print_table_sw(classifier_summary)
-
-    CurvePlotBuilder.combine_plots_as_grid(classifiers, len(SubjectBuilder.get_all_subject_ids()), '_sw_pr')
-    CurvePlotBuilder.combine_plots_as_grid(classifiers, len(SubjectBuilder.get_all_subject_ids()), '_sw_roc')
+    #CurvePlotBuilder.combine_plots_as_grid(classifiers, len(SubjectBuilder.get_all_subject_ids()), '_sw_pr')
+    #CurvePlotBuilder.combine_plots_as_grid(classifiers, len(SubjectBuilder.get_all_subject_ids()), '_sw_roc')
 
 
 def figures_mc_sleep_wake():

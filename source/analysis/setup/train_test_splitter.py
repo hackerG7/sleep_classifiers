@@ -18,6 +18,19 @@ class TrainTestSplitter(object):
             splits.append(DataSplit(training_set=training_set, testing_set=testing_set))
 
         return splits
+    
+    @staticmethod
+    def all_in_one(subject_ids):
+        splits = []
+
+        for index in range(len(subject_ids)):
+            training_set = subject_ids.copy()
+            testing_set = [training_set.pop(index)]
+            print("training_set: ", training_set)
+
+            splits.append(DataSplit(training_set=training_set, testing_set=testing_set))
+
+        return splits
 
     @staticmethod
     def by_fraction(subject_ids, test_fraction, number_of_splits):

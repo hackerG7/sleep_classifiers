@@ -56,10 +56,12 @@ class RawDataProcessor:
                                                                               start_time)
         hr_epoch_dictionary = RawDataProcessor.get_valid_epoch_dictionary(heart_rate_collection.timestamps,
                                                                           start_time)
-
+        
         valid_epochs = []
         for stage_item in psg_collection.data:
+            #print("stage_item: ",stage_item.stage)
             epoch = stage_item.epoch
+            #print("epoch: ",epoch.timestamp)
 
             if epoch.timestamp in motion_epoch_dictionary and epoch.timestamp in hr_epoch_dictionary \
                     and stage_item.stage != SleepStage.unscored:

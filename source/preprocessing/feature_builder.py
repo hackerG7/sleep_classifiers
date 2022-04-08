@@ -27,7 +27,10 @@ class FeatureBuilder(object):
 
     @staticmethod
     def build_from_wearables(subject_id, valid_epochs):
-
+        printedEpochsTimestamps = []
+        for e in valid_epochs:
+            printedEpochsTimestamps.append(e.timestamp)
+        print("valid epochs: ", printedEpochsTimestamps)
         count_feature = ActivityCountFeatureService.build(subject_id, valid_epochs)
         heart_rate_feature = HeartRateFeatureService.build(subject_id, valid_epochs)
         ActivityCountFeatureService.write(subject_id, count_feature)

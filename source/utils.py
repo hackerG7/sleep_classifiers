@@ -37,10 +37,10 @@ def get_classifiers():
 
 
 def get_base_feature_sets():
-    return [[FeatureType.count],
-            [FeatureType.heart_rate],
-            [FeatureType.count, FeatureType.heart_rate],
-            [FeatureType.count, FeatureType.heart_rate, FeatureType.cosine]]
+    return [#[FeatureType.count],
+            #[FeatureType.heart_rate],
+            [FeatureType.count, FeatureType.heart_rate]
+    ]
     # 12-23-19 note: I'm making the default base feature use cosine, not circadian model
     # so that it doesn't require MATLAB to run
 
@@ -87,24 +87,44 @@ def smooth_gauss(y, box_pts):
 
 
 def convolve_with_dog(y, box_pts):
+    print("box_pts: ",box_pts)
+    print("y: ", y)
     y = y - np.mean(y)
+    print("new y: ", y)
     box = np.ones(box_pts) / box_pts
+    print("box: ", box)
 
     mu1 = int(box_pts / 2.0)
+    print("mu1: ", mu1)
     sigma1 = 120
+    print("sigma1: ", sigma1)
 
     mu2 = int(box_pts / 2.0)
+    print("mu2: ", mu2)
     sigma2 = 600
+    print("sigma2: ", sigma2)
 
     scalar = 0.75
 
     for ind in range(0, box_pts):
         box[ind] = np.exp(-1 / 2 * (((ind - mu1) / sigma1) ** 2)) - scalar * np.exp(
             -1 / 2 * (((ind - mu2) / sigma2) ** 2))
-
+    print("box_pts: ",box_pts)
+    print("int(box_pts / 2): ",int(box_pts / 2))
+    print("new box: ", box)
+    print("y[0:int(box_pts / 2)].shape: ", y[0:int(box_pts / 2)].shape)
+    print("y[0:int(box_pts / 2)]: ", y[0:int(box_pts / 2)])
+    print("np.flip(y[0:int(box_pts / 2)])", np.flip(y[0:int(box_pts / 2)]))
     y = np.insert(y, 0, np.flip(y[0:int(box_pts / 2)]))  # Pad by repeating boundary conditions
+
+    print("new new y: ", y)
     y = np.insert(y, len(y) - 1, np.flip(y[int(-box_pts / 2):]))
+    print("new new new y.shape: ", y.shape)
+    print("new new new y: ", y)
+    print("box: ", box)
     y_smooth = np.convolve(y, box, mode='valid')
+    print("y_smooth.shape: ", y_smooth.shape)
+    print("y_smooth: ", y_smooth)
 
     return y_smooth
 
@@ -119,3 +139,4 @@ def remove_nans(array):
     array = array[~np.isnan(array).any(axis=1)]
     array = array[~np.isinf(array).any(axis=1)]
     return array
+#print("cwd", convolve_with_dog([80.5, 70.3, 60.5, 65.5], 10 * 30 - 15))

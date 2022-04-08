@@ -19,9 +19,14 @@ class PSGLabelService(object):
     @staticmethod
     def build(subject_id, valid_epochs):
         psg_array = PSGService.load_cropped_array(subject_id)
+        #print("psg_array: ",psg_array)
         labels = []
         for epoch in valid_epochs:
+            #print("timestamp: ", epoch.timestamp)
+            #print("psg_array[:, 0]: ", psg_array[:, 0])
+            #print("psg_array[:, 1]: ", psg_array[:, 1])
             value = np.interp(epoch.timestamp, psg_array[:, 0], psg_array[:, 1])
+            #print("value: ",value)
             labels.append(value)
         return np.array(labels)
 

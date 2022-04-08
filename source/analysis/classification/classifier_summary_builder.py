@@ -1,3 +1,4 @@
+import json
 from source.analysis.classification.classifier_service import ClassifierService
 from source.analysis.classification.classifier_summary import ClassifierSummary
 from source.analysis.setup.attributed_classifier import AttributedClassifier
@@ -27,7 +28,7 @@ class SleepWakeClassifierSummaryBuilder(object):
                             feature_sets: [[FeatureType]]) -> ClassifierSummary:
         subject_ids = SubjectBuilder.get_all_subject_ids()
         subject_dictionary = SubjectBuilder.get_subject_dictionary()
-
+        TrainTestSplitter.all_in_one(subject_ids)
         data_splits = TrainTestSplitter.leave_one_out(subject_ids)
 
         return SleepWakeClassifierSummaryBuilder.run_feature_sets(data_splits, subject_dictionary,
@@ -39,8 +40,16 @@ class SleepWakeClassifierSummaryBuilder(object):
                          feature_sets: [[FeatureType]]):
         performance_dictionary = {}
         for feature_set in feature_sets:
-            raw_performance_results = ClassifierService.run_sw(data_splits, attributed_classifier,
+            print("data_splits: ", (
+                data_splits[0].testing_set
+            ))
+            #raw_performance_results = ClassifierService.run_sw(data_splits, attributed_classifier,
+            #                                                   subject_dictionary, feature_set)
+            raw_performance_results = ClassifierService.run_three_class(data_splits, attributed_classifier,
                                                                subject_dictionary, feature_set)
+            #print("feature_set: ", feature_set)
+            #print("subject_dictionary: ", (subject_dictionary))
+            #print("raw_performance_results: ", raw_performance_results[0].class_probabilities)
             performance_dictionary[tuple(feature_set)] = raw_performance_results
 
         return ClassifierSummary(attributed_classifier, performance_dictionary)

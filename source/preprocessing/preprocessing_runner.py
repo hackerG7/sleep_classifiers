@@ -1,3 +1,11 @@
+from pathlib import Path
+import sys
+sys.path.append("C:\\Users\\hiIamG7\\Documents\\GitHub\\sleep_classifiers")
+sys.path.append("C:\\Users\\hiIamG7\\Documents\\GitHub\\sleep_classifiers\\source")
+sys.path.append("C:\\Users\\hiIamG7\\Documents\\GitHub\\sleep_classifiers\\source\\analysis")
+sys.path.append("C:\\Users\\hiIamG7\\Documents\\GitHub\\sleep_classifiers\\source\\preprocessing")
+print(sys.path)
+
 import time
 
 from source.analysis.figures.data_plot_builder import DataPlotBuilder
@@ -14,7 +22,7 @@ def run_preprocessing(subject_set):
 
     for subject in subject_set:
         print("Cropping data from subject " + str(subject) + "...")
-        RawDataProcessor.crop_all(str(subject))
+        #RawDataProcessor.crop_all(str(subject)) #no cropping every time
 
     if Constants.INCLUDE_CIRCADIAN:
         ActivityCountService.build_activity_counts()  # This uses MATLAB, but has been replaced with a python implementation
